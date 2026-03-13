@@ -396,7 +396,7 @@ ${safePaperText}
    - <h4>(五) 鑑別度（PBC）偏低題目</h4> (獨立抽出鑑別度 PBC 偏低或為負數的題目進行探討，分析為何這些題目無法有效區分高低分學生，是否為爭議題、陷阱過深或設計瑕疵)
    - <h4>(六) 整體教學建議</h4> (針對全級整體表現，提出後續跟進、拔尖補底策略與具體的教學調整方向)
    - <h4>(七) 分班教學建議及弱點分析</h4> (針對 AQP 數據中呈現的不同班別表現，提供專屬的弱點分析與針對性的教學建議；若無明顯班別差異，請針對極端能力群體提供策略)
-4. 語氣專業、具洞察力，排版層次分明。重點字詞或具體數據請使用 <strong> 標籤標註，字數約 1500 字以上。`;
+4. 語氣專業、具洞察力，排版層次分明。重點字詞或具體數據請使用 <strong> 標籤標註。報告不限字數，請盡可能提供最詳盡、最深入的剖析。`;
 
             const response = await fetch('https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions', {
                 method: 'POST',
@@ -411,7 +411,7 @@ ${safePaperText}
                         { role: 'user', content: userPrompt }
                     ],
                     temperature: 0.5, // Lower temperature for more analytical/factual response
-                    max_tokens: 3000
+                    max_tokens: 8000 // 大幅調高上限，確保長篇報告不會被截斷
                 })
             });
 
