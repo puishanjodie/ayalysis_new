@@ -65,11 +65,11 @@
             </div>
             <div>
                 <h1 class="text-xl font-bold text-slate-800 leading-tight">數學科 AQP 智能診斷系統</h1>
-                <span class="text-xs text-danger font-bold tracking-widest uppercase">Strict Data Extraction Edition</span>
+                <span class="text-xs text-danger font-bold tracking-widest uppercase">Strict Data Filter Edition</span>
             </div>
         </div>
         <div class="text-sm text-slate-600 font-medium flex items-center bg-red-50 px-4 py-2 rounded-full border border-red-200">
-            <i class="fa-solid fa-lock text-danger mr-2"></i> 強制窮舉模式 (不遺漏任何低分題)
+            <i class="fa-solid fa-filter text-danger mr-2"></i> 精準過濾模式 (僅顯示 < 60 分)
         </div>
     </nav>
 
@@ -328,7 +328,7 @@
             const loadingTexts = [
                 "正在完整掃描 AQP 數據報告所有頁面...",
                 "正在鎖定「題目數據表」區塊...",
-                "正在執行強制窮舉指令，抓取所有 < 60 分的題目...",
+                "正在執行過濾指令，剃除所有 >= 60 分的題目...",
                 "已排除「學生-題目-表」的干擾數據...",
                 "正在將低分題目與試卷內容進行交叉比對...",
                 "正在生成分析表格，確保無一遺漏...",
@@ -361,12 +361,11 @@
         }
 
         async function fetchQwenAnalysis(apiKey, gradeChinese, examText) {
-            // 將擷取字元上限提升至 100,000，確保即使數據表在最後一頁也能被納入上下文
             const safeAqpText = extractedAqpText.substring(0, 100000);
             const safePaperText = extractedPaperText.substring(0, 50000);
 
             const systemPrompt = `你是一位極度嚴謹的香港小學數學科數據分析專家。你的任務是閱讀「AQP 數據報告」與「試卷內容」，並輸出乾淨的 HTML 報告（不含 \`\`\`html 標記）。
-【絕對禁止的行為】：在列舉數據或題目時，絕對禁止使用「由於篇幅所限」、「以下列出部分」、「例如...等題目」等總結性語句。你必須擁有「窮舉(Exhaustive)」的機器人精神，只要數據存在，就必須全部列出。`;
+【絕對禁止的行為】：在列舉數據或題目時，絕對禁止使用「由於篇幅所限」、「以下列出部分」、「例如...等題目」等總結性語句。你必須擁有「窮舉(Exhaustive)」的機器人精神，只要符合條件的數據存在，就必須全部列出。`;
             
             const userPrompt = `請「完整掃描並深度分析」以下檔案內容。
             
@@ -385,9 +384,10 @@ ${safePaperText}
      【⚠️最高級別強制指令】：
      1. 你的視角必須鎖定在 AQP 報告中的「題目數據表」(或類似名稱的題目統計總表)。
      2. 絕對【不用綜合且不可讀取「學生-題目-表」】的資料！不要理會個別學生在哪一題對錯，這段只看「全體題目數據」。
-     3. 你必須將【所有】分數（或答對率）低於 60 的題目全部找出來。
-     4. 必須以 <table> 表格形式呈現。表格欄位為：題號、課題/內容、得分率/答對率(%)、陷阱與常犯錯誤分析(結合試卷內容)。
-     5. 【不准遺漏任何一題】！如果你在數據中找到 18 題低於 60 分，表格就必須有 18 列；若有 5 題，就必須有 5 列。嚴禁自行省略！
+     3. 【關鍵過濾條件】：你必須將【所有】分數（或答對率）少於 60 的題目全部找出來。
+     4. 【絕對禁止】：嚴禁在表格中列出任何大於或等於 60 分的題目！只要分數 >= 60，就直接略過，連提都不能提。
+     5. 必須以 <table> 表格形式呈現。表格欄位為：題號、課題/內容、得分率/答對率(%)、陷阱與常犯錯誤分析(結合試卷內容)。
+     6. 【不准遺漏任何一題低分題】！如果你在數據中找到 18 題少於 60 分，表格就必須有 18 列；若有 5 題，就必須有 5 列。嚴禁自行省略！
    - <h4>(四) 學生作答模式與能力分佈 (MCI 象限分析)</h4> 
    - <h4>(五) 鑑別度（PBC）偏低題目</h4> 
    - <h4>(六) 整體教學建議</h4> 
@@ -406,7 +406,7 @@ ${safePaperText}
                         { role: 'system', content: systemPrompt },
                         { role: 'user', content: userPrompt }
                     ],
-                    temperature: 0.1, // 極低溫度，降低 AI 自由發揮與省略的機率，使其變得極度死板且精確
+                    temperature: 0.1, // 極低溫度，降低 AI 自由發揮與省略的機率
                     max_tokens: 8000
                 })
             });
