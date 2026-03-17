@@ -42,7 +42,7 @@
         #aiAnalysisResult li::before { content: '\f0da'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: #3b82f6; position: absolute; left: 0; top: 0.1rem; }
         #aiAnalysisResult strong { color: #0f172a; background-color: #fef08a; padding: 0.1rem 0.4rem; border-radius: 0.25rem; font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         
-        /* 表格樣式 (預防 AI 生成表格) */
+        /* 表格樣式 */
         #aiAnalysisResult table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; background-color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 0.5rem; overflow: hidden; }
         #aiAnalysisResult th { background-color: #f1f5f9; color: #1e293b; font-weight: 700; text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #e2e8f0; }
         #aiAnalysisResult td { padding: 0.75rem 1rem; border-bottom: 1px solid #e2e8f0; color: #475569; }
@@ -59,11 +59,11 @@
             </div>
             <div>
                 <h1 class="text-xl font-bold text-slate-800 leading-tight">數學科 AQP 智能診斷系統</h1>
-                <span class="text-xs text-primary font-bold tracking-widest uppercase">Comprehensive Report Edition</span>
+                <span class="text-xs text-primary font-bold tracking-widest uppercase">Full Document Analysis Edition</span>
             </div>
         </div>
         <div class="text-sm text-slate-600 font-medium flex items-center bg-slate-100 px-4 py-2 rounded-full border border-slate-200">
-            <i class="fa-solid fa-file-shield text-emerald-600 mr-2"></i> 本地端安全解析
+            <i class="fa-solid fa-file-shield text-emerald-600 mr-2"></i> 全卷深度解析啟用
         </div>
     </nav>
 
@@ -71,7 +71,7 @@
     <div id="uploadSection" class="max-w-5xl mx-auto mt-10 px-6 pb-12 fade-in">
         <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-slate-800 mb-3">上傳測驗與數據檔案</h2>
-            <p class="text-slate-500 text-lg">系統將自動產出包含 <span class="font-bold text-primary">信度分析、MCI象限、陷阱拆解</span> 的八段式專業報告。</p>
+            <p class="text-slate-500 text-lg">系統將自動<span class="font-bold text-red-500">掃描整份 PDF 檔案</span>，產出最完整的八段式專業報告。</p>
         </div>
 
         <!-- API Key Configuration -->
@@ -121,8 +121,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- AQP Upload Box -->
                 <div id="aqpUploadBox" class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-primary hover:bg-blue-50 transition-all cursor-pointer relative group" onclick="document.getElementById('aqpFileInput').click()">
-                    <div id="aqpSpinner" class="hidden absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10">
-                        <i class="fa-solid fa-circle-notch fa-spin text-primary text-3xl"></i>
+                    <div id="aqpSpinner" class="hidden absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 flex-col">
+                        <i class="fa-solid fa-circle-notch fa-spin text-primary text-3xl mb-2"></i>
+                        <span class="text-sm text-primary font-bold">全卷讀取中...</span>
                     </div>
                     <i id="aqpIcon" class="fa-solid fa-file-waveform text-5xl text-slate-300 group-hover:text-primary transition-colors mb-4 drop-shadow-sm"></i>
                     <h3 class="font-bold text-lg mb-1 text-slate-700" id="aqpTitle">載入 AQP 數據報告</h3>
@@ -131,8 +132,9 @@
                 
                 <!-- Exam Paper Upload Box -->
                 <div id="paperUploadBox" class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-secondary hover:bg-indigo-50 transition-all cursor-pointer relative group" onclick="document.getElementById('paperFileInput').click()">
-                    <div id="paperSpinner" class="hidden absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10">
-                        <i class="fa-solid fa-circle-notch fa-spin text-secondary text-3xl"></i>
+                    <div id="paperSpinner" class="hidden absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 flex-col">
+                        <i class="fa-solid fa-circle-notch fa-spin text-secondary text-3xl mb-2"></i>
+                        <span class="text-sm text-secondary font-bold">全卷讀取中...</span>
                     </div>
                     <i id="paperIcon" class="fa-regular fa-file-lines text-5xl text-slate-300 group-hover:text-secondary transition-colors mb-4 drop-shadow-sm"></i>
                     <h3 class="font-bold text-lg mb-1 text-slate-700" id="paperTitle">載入試卷 (或答案卷)</h3>
@@ -156,7 +158,7 @@
             <div class="absolute inset-4 rounded-full border-b-4 border-accent animate-spin opacity-80" style="animation-duration: 2s;"></div>
             <i class="fa-solid fa-microchip absolute inset-0 flex items-center justify-center text-4xl text-slate-700 animate-pulse"></i>
         </div>
-        <h3 class="text-2xl font-bold text-slate-800 mb-3">AI 正在深度剖析測驗數據...</h3>
+        <h3 class="text-2xl font-bold text-slate-800 mb-3">AI 正在「全卷」深度剖析測驗數據...</h3>
         <p class="text-slate-600 font-medium text-md bg-white border border-slate-200 shadow-sm px-6 py-2 rounded-full" id="loadingText">初始化連線至 Qwen 模型...</p>
     </div>
 
@@ -192,7 +194,7 @@
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                     </span>
-                    <span class="text-emerald-400 text-xs font-mono font-bold tracking-wider">QWEN PLUS</span>
+                    <span class="text-emerald-400 text-xs font-mono font-bold tracking-wider">QWEN PLUS (長文本解析)</span>
                 </div>
             </div>
             
@@ -240,7 +242,7 @@
             document.getElementById(boxId).classList.add(isAqp ? 'border-primary' : 'border-secondary', 'bg-slate-50');
 
             try {
-                // Extract text directly in the browser
+                // Extract text directly in the browser (Full Document)
                 const text = await extractTextFromPDF(file);
                 
                 if (text.trim().length < 50) {
@@ -250,11 +252,11 @@
                 if (isAqp) {
                     extractedAqpText = text;
                     aqpFileName = file.name;
-                    updateBoxUI(iconId, titleId, descId, 'AQP 數據讀取成功', file.name, 'text-primary', 'fa-solid fa-circle-check');
+                    updateBoxUI(iconId, titleId, descId, 'AQP 全卷讀取成功', `共 ${text.length} 字元`, 'text-primary', 'fa-solid fa-circle-check');
                 } else {
                     extractedPaperText = text;
                     paperFileName = file.name;
-                    updateBoxUI(iconId, titleId, descId, '試卷內容讀取成功', file.name, 'text-secondary', 'fa-solid fa-circle-check');
+                    updateBoxUI(iconId, titleId, descId, '試卷全卷讀取成功', `共 ${text.length} 字元`, 'text-secondary', 'fa-solid fa-circle-check');
                 }
 
                 checkReadyState();
@@ -268,15 +270,14 @@
             }
         }
 
-        // Core Text Extraction Logic via PDF.js
+        // Core Text Extraction Logic via PDF.js (Modified to read ALL pages)
         async function extractTextFromPDF(file) {
             const arrayBuffer = await file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
             let fullText = "";
             
-            // Limit pages to avoid context length overflow. 
-            // 20 pages is safe enough for detailed primary school reports.
-            const maxPages = Math.min(pdf.numPages, 20);
+            // 讀取所有頁面，不設 20 頁限制，以確保讀到 AQP 最後面的數據
+            const maxPages = pdf.numPages;
             
             for (let i = 1; i <= maxPages; i++) {
                 const page = await pdf.getPage(i);
@@ -328,15 +329,13 @@
 
             // Animated Loading Text
             const loadingTexts = [
-                "正在提取測驗整體概況與信度數據...",
-                "正在歸納各數學課題之強弱表現...",
-                "正在比對題目分數低於 60 的陷阱題目...",
+                "正在完整掃描 AQP 數據報告所有頁面...",
+                "正在精準定位「分數分佈圖」數據...",
+                "正在列出所有分數低於 60 的陷阱題目...",
+                "正在比對試卷內容與學生常犯錯誤...",
                 "正在執行學生作答模式與 MCI 象限分析...",
-                "正在過濾鑑別度 (PBC) 偏低之題目...",
-                "正在撰寫整體教學建議...",
-                "正在整理分班教學建議及弱點分析...",
-                "正在萃取個別學生的強弱項數據...",
-                "即將完成，正在生成最終排版..."
+                "正在分析所有個別學生的強弱項...",
+                "即將完成長文本深度解讀，請稍候..."
             ];
             let textIndex = 0;
             const textInterval = setInterval(() => {
@@ -367,35 +366,35 @@
             }
         }
 
-        // Qwen International API Call Logic with the NEW SPECIFIC PROMPT
+        // Qwen International API Call Logic
         async function fetchQwenAnalysis(apiKey, gradeChinese, examText) {
-            // Keep payload within reasonable limits (approx 10000 chars per file)
-            const safeAqpText = extractedAqpText.substring(0, 10000);
-            const safePaperText = extractedPaperText.substring(0, 10000);
+            // 大幅放寬字元限制至 60,000 字元 (約合 2~3萬 tokens)，確保 Qwen 能讀到 PDF 尾段
+            const safeAqpText = extractedAqpText.substring(0, 60000);
+            const safePaperText = extractedPaperText.substring(0, 40000);
 
-            const systemPrompt = `你是一位資深的香港小學數學科課程主任兼數據分析專家。你的任務是根據老師最新上傳的「AQP 數據報告」與「試卷內容」，為該年級的數學團隊提供一份深刻、專業且具備高度行動力的分析報告。你只輸出乾淨的 HTML 程式碼，絕對不要包含任何 Markdown 標記 (如 \`\`\`html)。`;
+            const systemPrompt = `你是一位資深的香港小學數學科課程主任兼數據分析專家。你的任務是「完整閱讀並分析整份」老師上傳的「AQP 數據報告」與「試卷內容」，為該年級的數學團隊提供一份深刻、專業且具備高度行動力的分析報告。你只輸出乾淨的 HTML 程式碼，絕對不要包含任何 Markdown 標記 (如 \`\`\`html)。`;
             
-            const userPrompt = `請根據以下最新上傳的【${gradeChinese}年級 ${examText}】檔案內容，撰寫專屬分析報告。
+            const userPrompt = `請「完整掃描並深度分析」以下最新上傳的【${gradeChinese}年級 ${examText}】完整檔案內容。請務必讀到最後一頁的數據。
             
-【最新 AQP 數據報告擷取文字】：
+【最新 AQP 數據報告擷取文字 (全卷)】：
 ${safeAqpText}
 
-【最新試卷內容擷取文字】：
+【最新試卷內容擷取文字 (全卷)】：
 ${safePaperText}
 
 輸出要求（必須嚴格遵守 HTML 格式）：
-1. 僅使用 <h4>, <p>, <ul>, <li>, <strong>, <table>, <tr>, <th>, <td>, <div>, <span> 進行排版。若有需要整理數據（如各課題表現），可適度使用 HTML 表格。
-2. 內容必須基於上述提供的擷取文字進行分析。即使擷取的文字有少許亂碼，也請依據你的專業知識判斷其含義（例如找出平均分、標準差、低分題號及對應題目）。
+1. 僅使用 <h4>, <p>, <ul>, <li>, <strong>, <table>, <tr>, <th>, <td>, <div>, <span> 進行排版。
+2. 內容必須基於上述提供的擷取文字進行分析。即使擷取的文字有少許排版錯亂，也請依據專業知識判斷。
 3. 報告必須包含以下【八大核心章節】，標題請完全照抄：
-   - <h4>(一) 測驗整體概況與信度</h4> (分析受測對象、試卷整體信度、整體分數分佈、平均分、標準差等概況。**請務必以「圖表」形式視覺化顯示！請使用 HTML 數據表格呈現平均分、標準差等數值，並利用 CSS 繪製橫向長條圖來顯示「整體分數分佈」，例如：<div style="display:flex; align-items:center; margin-bottom:8px;"><span style="width:80px;">90-100分</span><div style="background-color:#3b82f6; height:24px; border-radius:4px; width:25%; margin:0 10px;"></div><span>25% (X人)</span></div>，以此類推建構出完整的分佈圖表**)
-   - <h4>(二) 各數學課題表現分析</h4> (歸納出表現最佳的課題、表現較弱的課題，並指出具體得分率或相關數據)
-   - <h4>(三) 題目難度與陷阱分析</h4> (必須分析所有**題目分數低於 60**的題目。相關數據請運用AQP報告中的「**分數分佈圖**」分析，絕對不用「學生-題目-表」。報告必須**逐一列出並顯示**所有題目分數低於 60 的題目，並結合試卷題目文字，分析每一題學生常犯錯誤的原因與被干擾的陷阱。絕對不能遺漏！)
-   - <h4>(四) 學生作答模式與能力分佈 (MCI 象限分析)</h4> (根據 AQP 數據中的學生能力、題目難度對比圖或 MCI 象限分佈，分析不同能力層級學生的狀態，或異常作答模式)
-   - <h4>(五) 鑑別度（PBC）偏低題目</h4> (獨立抽出鑑別度 PBC 偏低或為負數的題目進行探討，分析為何這些題目無法有效區分高低分學生，是否為爭議題、陷阱過深或設計瑕疵)
-   - <h4>(六) 整體教學建議</h4> (針對全級整體表現，提出後續跟進、拔尖補底策略與具體的教學調整方向)
-   - <h4>(七) 分班教學建議及弱點分析</h4> (針對 AQP 數據中呈現的不同班別表現，提供專屬的弱點分析與針對性的教學建議；若無明顯班別差異，請針對極端能力群體提供策略)
-   - <h4>(八) 個別學生強弱項分析</h4> (根據 AQP 數據中出現的學生個別成績與各題作答狀況，具體分析並列出每個學生的強弱項。請以「表格」形式整理，欄位建議包含：學生姓名/學號、優勢課題、弱勢課題、個別跟進建議。務必盡可能涵蓋數據中出現的所有學生)
-4. 語氣專業、具洞察力，排版層次分明。重點字詞或具體數據請使用 <strong> 標籤標註。報告不限字數，請盡可能提供最詳盡、最深入的剖析。`;
+   - <h4>(一) 測驗整體概況與信度</h4> (分析受測對象、整體信度、整體分數分佈、平均分、標準差等概況。請務必以「圖表」形式視覺化顯示！)
+   - <h4>(二) 各數學課題表現分析</h4> (歸納出表現最佳與較弱的課題，並指出具體得分率)
+   - <h4>(三) 題目難度與陷阱分析</h4> (必須完整掃描整份AQP報告中的「分數分佈圖」數據，找出並分析**「所有」題目分數低於 60**的題目。報告必須**逐一列出並顯示所有分數低於 60 的題目**，結合試卷題目文字，分析每一題學生常犯錯誤的原因。絕對不能遺漏任何一題低於60分的題目！)
+   - <h4>(四) 學生作答模式與能力分佈 (MCI 象限分析)</h4> 
+   - <h4>(五) 鑑別度（PBC）偏低題目</h4> 
+   - <h4>(六) 整體教學建議</h4> 
+   - <h4>(七) 分班教學建議及弱點分析</h4> 
+   - <h4>(八) 個別學生強弱項分析</h4> (根據 AQP 數據，具體分析並以「表格」列出每個學生的強弱項。務必盡可能涵蓋數據中出現的學生)
+4. 語氣專業、排版層次分明。重點字詞使用 <strong> 標註。報告不限字數，盡量提供最詳盡的剖析。`;
 
             const response = await fetch('https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions', {
                 method: 'POST',
@@ -409,8 +408,8 @@ ${safePaperText}
                         { role: 'system', content: systemPrompt },
                         { role: 'user', content: userPrompt }
                     ],
-                    temperature: 0.5, // Lower temperature for more analytical/factual response
-                    max_tokens: 8000 // 大幅調高上限，確保長篇報告不會被截斷
+                    temperature: 0.3, // 稍微調低溫度讓數據抓取更精準
+                    max_tokens: 8000 // 確保長篇報告完整產出
                 })
             });
 
@@ -422,7 +421,7 @@ ${safePaperText}
             const result = await response.json();
             let content = result.choices[0].message.content;
             
-            // Sanitize output (remove markdown code blocks if the AI accidentally adds them)
+            // Sanitize output
             content = content.replace(/```html/g, '').replace(/```/g, '').trim();
             return content;
         }
