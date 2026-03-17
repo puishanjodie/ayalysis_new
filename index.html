@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小學數學 AQP 智能分析系統 (Qwen 深度報告版)</title>
+    <title>小學數學 AQP 智能分析系統 (精準數據對焦版)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -32,7 +32,7 @@
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Qwen AI 報告專屬排版 - 支援深度報告格式 */
+        /* AI 報告專屬排版 - 支援深度報告格式 */
         #aiAnalysisResult { color: #334155; font-size: 1.05rem; line-height: 1.8; }
         #aiAnalysisResult h4 { font-weight: 800; color: #1e40af; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; display: flex; align-items: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 0.5rem; }
         #aiAnalysisResult h4::before { content: '📊'; margin-right: 0.5rem; font-size: 1.2rem; }
@@ -59,11 +59,11 @@
             </div>
             <div>
                 <h1 class="text-xl font-bold text-slate-800 leading-tight">數學科 AQP 智能診斷系統</h1>
-                <span class="text-xs text-primary font-bold tracking-widest uppercase">Full Document Analysis Edition</span>
+                <span class="text-xs text-primary font-bold tracking-widest uppercase">Targeted Data Analysis Edition</span>
             </div>
         </div>
         <div class="text-sm text-slate-600 font-medium flex items-center bg-slate-100 px-4 py-2 rounded-full border border-slate-200">
-            <i class="fa-solid fa-file-shield text-emerald-600 mr-2"></i> 全卷深度解析啟用
+            <i class="fa-solid fa-bullseye text-emerald-600 mr-2"></i> 題目數據表精準對焦啟用
         </div>
     </nav>
 
@@ -71,7 +71,7 @@
     <div id="uploadSection" class="max-w-5xl mx-auto mt-10 px-6 pb-12 fade-in">
         <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-slate-800 mb-3">上傳測驗與數據檔案</h2>
-            <p class="text-slate-500 text-lg">系統將自動<span class="font-bold text-red-500">掃描整份 PDF 檔案</span>，產出最完整的八段式專業報告。</p>
+            <p class="text-slate-500 text-lg">系統將自動<span class="font-bold text-red-500">掃描整份 PDF 檔案</span>，並精準抓取題目數據表進行分析。</p>
         </div>
 
         <!-- API Key Configuration -->
@@ -330,10 +330,10 @@
             // Animated Loading Text
             const loadingTexts = [
                 "正在完整掃描 AQP 數據報告所有頁面...",
-                "正在精準定位「分數分佈圖」數據...",
+                "正在精準定位「題目數據表」數據...",
                 "正在列出所有分數低於 60 的陷阱題目...",
+                "正在排除不必要的學生題目交錯矩陣...",
                 "正在比對試卷內容與學生常犯錯誤...",
-                "正在執行學生作答模式與 MCI 象限分析...",
                 "正在分析所有個別學生的強弱項...",
                 "即將完成長文本深度解讀，請稍候..."
             ];
@@ -388,7 +388,7 @@ ${safePaperText}
 3. 報告必須包含以下【八大核心章節】，標題請完全照抄：
    - <h4>(一) 測驗整體概況與信度</h4> (分析受測對象、整體信度、整體分數分佈、平均分、標準差等概況。請務必以「圖表」形式視覺化顯示！)
    - <h4>(二) 各數學課題表現分析</h4> (歸納出表現最佳與較弱的課題，並指出具體得分率)
-   - <h4>(三) 題目難度與陷阱分析</h4> (必須完整掃描整份AQP報告中的「分數分佈圖」數據，找出並分析**「所有」題目分數低於 60**的題目。報告必須**逐一列出並顯示所有分數低於 60 的題目**，結合試卷題目文字，分析每一題學生常犯錯誤的原因。絕對不能遺漏任何一題低於60分的題目！)
+   - <h4>(三) 題目難度與陷阱分析</h4> (⚠️極重要指令：必須完整掃描整份AQP報告中的「題目數據表」，找出並分析**「所有」分數/答對率低於 60 的題目**。此部分**不用綜合「學生-題目-表」**的資料。報告必須**逐一列出並顯示所有分數低於 60 的題目**，並結合試卷題目文字，分析每一題學生常犯錯誤的原因。絕對不能遺漏任何一題低於60分的題目！)
    - <h4>(四) 學生作答模式與能力分佈 (MCI 象限分析)</h4> 
    - <h4>(五) 鑑別度（PBC）偏低題目</h4> 
    - <h4>(六) 整體教學建議</h4> 
