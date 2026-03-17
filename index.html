@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小學數學 AQP 智能分析系統 (精準數據對焦版)</title>
+    <title>小學數學 AQP 智能分析系統 (強制窮舉對焦版)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -20,7 +20,8 @@
                     colors: {
                         primary: '#2563eb', // Blue-600
                         secondary: '#4f46e5', // Indigo-600
-                        accent: '#0ea5e9' // Sky-500
+                        accent: '#0ea5e9', // Sky-500
+                        danger: '#e11d48' // Rose-600
                     }
                 }
             }
@@ -42,11 +43,16 @@
         #aiAnalysisResult li::before { content: '\f0da'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: #3b82f6; position: absolute; left: 0; top: 0.1rem; }
         #aiAnalysisResult strong { color: #0f172a; background-color: #fef08a; padding: 0.1rem 0.4rem; border-radius: 0.25rem; font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         
-        /* 表格樣式 */
-        #aiAnalysisResult table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; background-color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 0.5rem; overflow: hidden; }
-        #aiAnalysisResult th { background-color: #f1f5f9; color: #1e293b; font-weight: 700; text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #e2e8f0; }
-        #aiAnalysisResult td { padding: 0.75rem 1rem; border-bottom: 1px solid #e2e8f0; color: #475569; }
+        /* 表格樣式優化，針對第(三)部分的窮舉表格 */
+        #aiAnalysisResult table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 0.5rem; overflow: hidden; }
+        #aiAnalysisResult th { background-color: #f1f5f9; color: #1e293b; font-weight: 700; text-align: left; padding: 1rem; border-bottom: 2px solid #cbd5e1; }
+        #aiAnalysisResult td { padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #475569; vertical-align: top; }
+        #aiAnalysisResult tr:nth-child(even) { background-color: #f8fafc; }
+        #aiAnalysisResult tr:hover { background-color: #f1f5f9; transition: background-color 0.2s; }
         #aiAnalysisResult tr:last-child td { border-bottom: none; }
+        
+        /* 針對特定低分題目的強調 */
+        .alert-row td { background-color: #fff1f2 !important; }
     </style>
 </head>
 <body class="text-slate-800 antialiased">
@@ -54,16 +60,16 @@
     <!-- Navbar -->
     <nav class="bg-white shadow-sm border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         <div class="flex items-center gap-3">
-            <div class="bg-gradient-to-br from-primary to-secondary text-white p-2.5 rounded-xl shadow-sm">
-                <i class="fa-solid fa-chart-pie text-xl"></i>
+            <div class="bg-gradient-to-br from-primary to-danger text-white p-2.5 rounded-xl shadow-sm">
+                <i class="fa-solid fa-microscope text-xl"></i>
             </div>
             <div>
                 <h1 class="text-xl font-bold text-slate-800 leading-tight">數學科 AQP 智能診斷系統</h1>
-                <span class="text-xs text-primary font-bold tracking-widest uppercase">Targeted Data Analysis Edition</span>
+                <span class="text-xs text-danger font-bold tracking-widest uppercase">Strict Data Extraction Edition</span>
             </div>
         </div>
-        <div class="text-sm text-slate-600 font-medium flex items-center bg-slate-100 px-4 py-2 rounded-full border border-slate-200">
-            <i class="fa-solid fa-bullseye text-emerald-600 mr-2"></i> 題目數據表精準對焦啟用
+        <div class="text-sm text-slate-600 font-medium flex items-center bg-red-50 px-4 py-2 rounded-full border border-red-200">
+            <i class="fa-solid fa-lock text-danger mr-2"></i> 強制窮舉模式 (不遺漏任何低分題)
         </div>
     </nav>
 
@@ -71,7 +77,7 @@
     <div id="uploadSection" class="max-w-5xl mx-auto mt-10 px-6 pb-12 fade-in">
         <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-slate-800 mb-3">上傳測驗與數據檔案</h2>
-            <p class="text-slate-500 text-lg">系統將自動<span class="font-bold text-red-500">掃描整份 PDF 檔案</span>，並精準抓取題目數據表進行分析。</p>
+            <p class="text-slate-500 text-lg">系統將自動<span class="font-bold text-danger">掃描整份 PDF 檔案</span>，並強制抓出所有低於60分的題目。</p>
         </div>
 
         <!-- API Key Configuration -->
@@ -113,7 +119,7 @@
 
         <!-- File Upload Section -->
         <div class="bg-white p-6 rounded-2xl shadow-sm mb-8 border border-slate-200 hover:shadow-md transition-shadow">
-            <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-file-pdf text-red-500 mr-2"></i>3. 上傳 PDF 檔案 (試卷與數據)</h3>
+            <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center"><i class="fa-solid fa-file-pdf text-danger mr-2"></i>3. 上傳 PDF 檔案 (試卷與數據)</h3>
             
             <input type="file" id="aqpFileInput" accept=".pdf" class="hidden" onchange="handleFileSelect(event, 'aqp')">
             <input type="file" id="paperFileInput" accept=".pdf" class="hidden" onchange="handleFileSelect(event, 'paper')">
@@ -123,7 +129,7 @@
                 <div id="aqpUploadBox" class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-primary hover:bg-blue-50 transition-all cursor-pointer relative group" onclick="document.getElementById('aqpFileInput').click()">
                     <div id="aqpSpinner" class="hidden absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 flex-col">
                         <i class="fa-solid fa-circle-notch fa-spin text-primary text-3xl mb-2"></i>
-                        <span class="text-sm text-primary font-bold">全卷讀取中...</span>
+                        <span class="text-sm text-primary font-bold mt-2">全卷讀取中...</span>
                     </div>
                     <i id="aqpIcon" class="fa-solid fa-file-waveform text-5xl text-slate-300 group-hover:text-primary transition-colors mb-4 drop-shadow-sm"></i>
                     <h3 class="font-bold text-lg mb-1 text-slate-700" id="aqpTitle">載入 AQP 數據報告</h3>
@@ -134,7 +140,7 @@
                 <div id="paperUploadBox" class="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-secondary hover:bg-indigo-50 transition-all cursor-pointer relative group" onclick="document.getElementById('paperFileInput').click()">
                     <div id="paperSpinner" class="hidden absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 flex-col">
                         <i class="fa-solid fa-circle-notch fa-spin text-secondary text-3xl mb-2"></i>
-                        <span class="text-sm text-secondary font-bold">全卷讀取中...</span>
+                        <span class="text-sm text-secondary font-bold mt-2">全卷讀取中...</span>
                     </div>
                     <i id="paperIcon" class="fa-regular fa-file-lines text-5xl text-slate-300 group-hover:text-secondary transition-colors mb-4 drop-shadow-sm"></i>
                     <h3 class="font-bold text-lg mb-1 text-slate-700" id="paperTitle">載入試卷 (或答案卷)</h3>
@@ -145,7 +151,7 @@
 
         <div class="text-center">
             <button id="analyzeBtn" onclick="startAnalysis()" class="bg-slate-200 text-slate-400 font-bold py-4 px-12 rounded-full transition-all cursor-not-allowed text-lg w-full md:w-auto flex items-center justify-center mx-auto" disabled>
-                <i class="fa-solid fa-bolt mr-3"></i> 產生八段式深度分析報告
+                <i class="fa-solid fa-bolt mr-3"></i> 執行強制窮舉深度分析
             </button>
         </div>
     </div>
@@ -153,12 +159,12 @@
     <!-- Loading Screen -->
     <div id="loadingSection" class="hidden flex-col items-center justify-center min-h-[75vh]">
         <div class="relative w-32 h-32 mb-8">
-            <div class="absolute inset-0 rounded-full border-t-4 border-primary animate-spin opacity-80"></div>
+            <div class="absolute inset-0 rounded-full border-t-4 border-danger animate-spin opacity-80"></div>
             <div class="absolute inset-2 rounded-full border-r-4 border-secondary animate-spin opacity-80" style="animation-direction: reverse; animation-duration: 1.2s;"></div>
-            <div class="absolute inset-4 rounded-full border-b-4 border-accent animate-spin opacity-80" style="animation-duration: 2s;"></div>
-            <i class="fa-solid fa-microchip absolute inset-0 flex items-center justify-center text-4xl text-slate-700 animate-pulse"></i>
+            <div class="absolute inset-4 rounded-full border-b-4 border-primary animate-spin opacity-80" style="animation-duration: 2s;"></div>
+            <i class="fa-solid fa-database absolute inset-0 flex items-center justify-center text-4xl text-slate-700 animate-pulse"></i>
         </div>
-        <h3 class="text-2xl font-bold text-slate-800 mb-3">AI 正在「全卷」深度剖析測驗數據...</h3>
+        <h3 class="text-2xl font-bold text-slate-800 mb-3">AI 正在嚴格比對數據，確保不漏任何一題...</h3>
         <p class="text-slate-600 font-medium text-md bg-white border border-slate-200 shadow-sm px-6 py-2 rounded-full" id="loadingText">初始化連線至 Qwen 模型...</p>
     </div>
 
@@ -176,7 +182,7 @@
                 <button onclick="window.location.reload()" class="flex-1 md:flex-none bg-white border border-slate-300 text-slate-700 px-5 py-2.5 rounded-lg hover:bg-slate-50 transition text-sm font-bold flex items-center justify-center shadow-sm">
                     <i class="fa-solid fa-rotate-left mr-2"></i> 重新上傳
                 </button>
-                <button onclick="window.print()" class="flex-1 md:flex-none bg-gradient-to-r from-primary to-secondary text-white px-6 py-2.5 rounded-lg hover:shadow-lg transition-all shadow-md text-sm font-bold flex items-center justify-center">
+                <button onclick="window.print()" class="flex-1 md:flex-none bg-gradient-to-r from-primary to-danger text-white px-6 py-2.5 rounded-lg hover:shadow-lg transition-all shadow-md text-sm font-bold flex items-center justify-center">
                     <i class="fa-solid fa-print mr-2"></i> 列印完整報告
                 </button>
             </div>
@@ -184,7 +190,7 @@
 
         <!-- AI Report Content -->
         <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden relative">
-            <div class="bg-slate-800 px-8 py-6 flex justify-between items-center border-b-4 border-primary">
+            <div class="bg-slate-800 px-8 py-6 flex justify-between items-center border-b-4 border-danger">
                 <h2 class="font-bold text-xl text-white flex items-center tracking-wide">
                     <i class="fa-solid fa-file-contract text-yellow-400 mr-3 text-2xl drop-shadow-md"></i> 
                     測驗綜合診斷與教學策略建議書
@@ -194,7 +200,7 @@
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                     </span>
-                    <span class="text-emerald-400 text-xs font-mono font-bold tracking-wider">QWEN PLUS (長文本解析)</span>
+                    <span class="text-emerald-400 text-xs font-mono font-bold tracking-wider">QWEN PLUS (嚴格抽取模式)</span>
                 </div>
             </div>
             
@@ -217,7 +223,6 @@
             '1': '一', '2': '二', '3': '三', '4': '四', '5': '五', '6': '六'
         };
 
-        // Initialize: Load saved API Key
         document.addEventListener('DOMContentLoaded', () => {
             const savedKey = localStorage.getItem('qwenApiKey');
             if (savedKey) {
@@ -225,7 +230,6 @@
             }
         });
 
-        // File Handler - Processes ANY uploaded PDF dynamically
         async function handleFileSelect(event, type) {
             const file = event.target.files[0];
             if (!file) return;
@@ -237,12 +241,10 @@
             const iconId = isAqp ? 'aqpIcon' : 'paperIcon';
             const boxId = isAqp ? 'aqpUploadBox' : 'paperUploadBox';
 
-            // UI Loading State
             document.getElementById(spinnerId).classList.remove('hidden');
             document.getElementById(boxId).classList.add(isAqp ? 'border-primary' : 'border-secondary', 'bg-slate-50');
 
             try {
-                // Extract text directly in the browser (Full Document)
                 const text = await extractTextFromPDF(file);
                 
                 if (text.trim().length < 50) {
@@ -252,11 +254,11 @@
                 if (isAqp) {
                     extractedAqpText = text;
                     aqpFileName = file.name;
-                    updateBoxUI(iconId, titleId, descId, 'AQP 全卷讀取成功', `共 ${text.length} 字元`, 'text-primary', 'fa-solid fa-circle-check');
+                    updateBoxUI(iconId, titleId, descId, 'AQP 全卷讀取成功', `共讀取 ${text.length} 字元`, 'text-primary', 'fa-solid fa-circle-check');
                 } else {
                     extractedPaperText = text;
                     paperFileName = file.name;
-                    updateBoxUI(iconId, titleId, descId, '試卷全卷讀取成功', `共 ${text.length} 字元`, 'text-secondary', 'fa-solid fa-circle-check');
+                    updateBoxUI(iconId, titleId, descId, '試卷全卷讀取成功', `共讀取 ${text.length} 字元`, 'text-secondary', 'fa-solid fa-circle-check');
                 }
 
                 checkReadyState();
@@ -270,20 +272,19 @@
             }
         }
 
-        // Core Text Extraction Logic via PDF.js (Modified to read ALL pages)
         async function extractTextFromPDF(file) {
             const arrayBuffer = await file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
             let fullText = "";
             
-            // 讀取所有頁面，不設 20 頁限制，以確保讀到 AQP 最後面的數據
+            // 讀取所有頁面，確保不會漏掉 AQP 最後的數據表
             const maxPages = pdf.numPages;
             
             for (let i = 1; i <= maxPages; i++) {
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
                 const pageText = textContent.items.map(item => item.str).join(" ");
-                fullText += `--- 第 ${i} 頁 ---\n${pageText}\n\n`;
+                fullText += `\n--- [第 ${i} 頁] ---\n${pageText}\n`;
             }
             return fullText;
         }
@@ -300,11 +301,10 @@
             const btn = document.getElementById('analyzeBtn');
             if (extractedAqpText && extractedPaperText) {
                 btn.disabled = false;
-                btn.className = "bg-primary hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-full shadow-xl shadow-blue-200/50 transition-all text-lg w-full md:w-auto flex items-center justify-center mx-auto transform hover:-translate-y-1";
+                btn.className = "bg-danger hover:bg-red-700 text-white font-bold py-4 px-12 rounded-full shadow-xl shadow-red-200/50 transition-all text-lg w-full md:w-auto flex items-center justify-center mx-auto transform hover:-translate-y-1";
             }
         }
 
-        // Start Analysis Process
         async function startAnalysis() {
             const apiKey = document.getElementById('qwenApiKey').value.trim();
             if(!apiKey) {
@@ -315,41 +315,36 @@
             
             localStorage.setItem('qwenApiKey', apiKey);
 
-            // Switch to Loading UI
             document.getElementById('uploadSection').classList.add('hidden');
             document.getElementById('loadingSection').classList.remove('hidden');
             document.getElementById('loadingSection').classList.add('flex');
 
-            // Setup Dashboard Headers dynamically
             const gradeVal = document.getElementById('gradeSelect').value;
             const examText = document.getElementById('examSelect').options[document.getElementById('examSelect').selectedIndex].text;
             document.getElementById('dynamicGradeBadge').innerText = `${gradeMap[gradeVal]}年級 (P.${gradeVal})`;
             document.getElementById('dynamicExamBadge').innerText = examText;
             document.getElementById('sourceFilesTxt').innerText = `${aqpFileName} | ${paperFileName}`;
 
-            // Animated Loading Text
             const loadingTexts = [
                 "正在完整掃描 AQP 數據報告所有頁面...",
-                "正在精準定位「題目數據表」數據...",
-                "正在列出所有分數低於 60 的陷阱題目...",
-                "正在排除不必要的學生題目交錯矩陣...",
-                "正在比對試卷內容與學生常犯錯誤...",
-                "正在分析所有個別學生的強弱項...",
-                "即將完成長文本深度解讀，請稍候..."
+                "正在鎖定「題目數據表」區塊...",
+                "正在執行強制窮舉指令，抓取所有 < 60 分的題目...",
+                "已排除「學生-題目-表」的干擾數據...",
+                "正在將低分題目與試卷內容進行交叉比對...",
+                "正在生成分析表格，確保無一遺漏...",
+                "即將完成嚴格驗證，請稍候..."
             ];
             let textIndex = 0;
             const textInterval = setInterval(() => {
                 textIndex = (textIndex + 1) % loadingTexts.length;
                 document.getElementById('loadingText').innerText = loadingTexts[textIndex];
-            }, 3000);
+            }, 2500);
 
             try {
-                // Execute API Call with Dynamic Text
                 const htmlReport = await fetchQwenAnalysis(apiKey, gradeMap[gradeVal], examText);
                 
                 document.getElementById('aiAnalysisResult').innerHTML = htmlReport;
 
-                // Show Dashboard
                 clearInterval(textInterval);
                 document.getElementById('loadingSection').classList.remove('flex');
                 document.getElementById('loadingSection').classList.add('hidden');
@@ -359,42 +354,45 @@
                 clearInterval(textInterval);
                 alert('API 呼叫失敗！請檢查您的 API Key 或網絡連線。\n詳細錯誤：' + error.message);
                 
-                // Return to Upload View on failure
                 document.getElementById('loadingSection').classList.remove('flex');
                 document.getElementById('loadingSection').classList.add('hidden');
                 document.getElementById('uploadSection').classList.remove('hidden');
             }
         }
 
-        // Qwen International API Call Logic
         async function fetchQwenAnalysis(apiKey, gradeChinese, examText) {
-            // 大幅放寬字元限制至 60,000 字元 (約合 2~3萬 tokens)，確保 Qwen 能讀到 PDF 尾段
-            const safeAqpText = extractedAqpText.substring(0, 60000);
-            const safePaperText = extractedPaperText.substring(0, 40000);
+            // 將擷取字元上限提升至 100,000，確保即使數據表在最後一頁也能被納入上下文
+            const safeAqpText = extractedAqpText.substring(0, 100000);
+            const safePaperText = extractedPaperText.substring(0, 50000);
 
-            const systemPrompt = `你是一位資深的香港小學數學科課程主任兼數據分析專家。你的任務是「完整閱讀並分析整份」老師上傳的「AQP 數據報告」與「試卷內容」，為該年級的數學團隊提供一份深刻、專業且具備高度行動力的分析報告。你只輸出乾淨的 HTML 程式碼，絕對不要包含任何 Markdown 標記 (如 \`\`\`html)。`;
+            const systemPrompt = `你是一位極度嚴謹的香港小學數學科數據分析專家。你的任務是閱讀「AQP 數據報告」與「試卷內容」，並輸出乾淨的 HTML 報告（不含 \`\`\`html 標記）。
+【絕對禁止的行為】：在列舉數據或題目時，絕對禁止使用「由於篇幅所限」、「以下列出部分」、「例如...等題目」等總結性語句。你必須擁有「窮舉(Exhaustive)」的機器人精神，只要數據存在，就必須全部列出。`;
             
-            const userPrompt = `請「完整掃描並深度分析」以下最新上傳的【${gradeChinese}年級 ${examText}】完整檔案內容。請務必讀到最後一頁的數據。
+            const userPrompt = `請「完整掃描並深度分析」以下檔案內容。
             
-【最新 AQP 數據報告擷取文字 (全卷)】：
+【AQP 數據報告 (全卷擷取)】：
 ${safeAqpText}
 
-【最新試卷內容擷取文字 (全卷)】：
+【試卷內容 (全卷擷取)】：
 ${safePaperText}
 
-輸出要求（必須嚴格遵守 HTML 格式）：
-1. 僅使用 <h4>, <p>, <ul>, <li>, <strong>, <table>, <tr>, <th>, <td>, <div>, <span> 進行排版。
-2. 內容必須基於上述提供的擷取文字進行分析。即使擷取的文字有少許排版錯亂，也請依據專業知識判斷。
-3. 報告必須包含以下【八大核心章節】，標題請完全照抄：
-   - <h4>(一) 測驗整體概況與信度</h4> (分析受測對象、整體信度、整體分數分佈、平均分、標準差等概況。請務必以「圖表」形式視覺化顯示！)
-   - <h4>(二) 各數學課題表現分析</h4> (歸納出表現最佳與較弱的課題，並指出具體得分率)
-   - <h4>(三) 題目難度與陷阱分析</h4> (⚠️極重要指令：必須完整掃描整份AQP報告中的「題目數據表」，找出並分析**「所有」分數/答對率低於 60 的題目**。此部分**不用綜合「學生-題目-表」**的資料。報告必須**逐一列出並顯示所有分數低於 60 的題目**，並結合試卷題目文字，分析每一題學生常犯錯誤的原因。絕對不能遺漏任何一題低於60分的題目！)
+輸出要求：
+1. 僅使用 <h4>, <p>, <ul>, <li>, <strong>, <table>, <tr>, <th>, <td> 進行排版。
+2. 必須包含以下【八大核心章節】，標題請完全照抄：
+   - <h4>(一) 測驗整體概況與信度</h4>
+   - <h4>(二) 各數學課題表現分析</h4>
+   - <h4>(三) 題目難度與陷阱分析</h4>
+     【⚠️最高級別強制指令】：
+     1. 你的視角必須鎖定在 AQP 報告中的「題目數據表」(或類似名稱的題目統計總表)。
+     2. 絕對【不用綜合且不可讀取「學生-題目-表」】的資料！不要理會個別學生在哪一題對錯，這段只看「全體題目數據」。
+     3. 你必須將【所有】分數（或答對率）低於 60 的題目全部找出來。
+     4. 必須以 <table> 表格形式呈現。表格欄位為：題號、課題/內容、得分率/答對率(%)、陷阱與常犯錯誤分析(結合試卷內容)。
+     5. 【不准遺漏任何一題】！如果你在數據中找到 18 題低於 60 分，表格就必須有 18 列；若有 5 題，就必須有 5 列。嚴禁自行省略！
    - <h4>(四) 學生作答模式與能力分佈 (MCI 象限分析)</h4> 
    - <h4>(五) 鑑別度（PBC）偏低題目</h4> 
    - <h4>(六) 整體教學建議</h4> 
    - <h4>(七) 分班教學建議及弱點分析</h4> 
-   - <h4>(八) 個別學生強弱項分析</h4> (根據 AQP 數據，具體分析並以「表格」列出每個學生的強弱項。務必盡可能涵蓋數據中出現的學生)
-4. 語氣專業、排版層次分明。重點字詞使用 <strong> 標註。報告不限字數，盡量提供最詳盡的剖析。`;
+   - <h4>(八) 個別學生強弱項分析</h4> (以表格列出)`;
 
             const response = await fetch('https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions', {
                 method: 'POST',
@@ -408,8 +406,8 @@ ${safePaperText}
                         { role: 'system', content: systemPrompt },
                         { role: 'user', content: userPrompt }
                     ],
-                    temperature: 0.3, // 稍微調低溫度讓數據抓取更精準
-                    max_tokens: 8000 // 確保長篇報告完整產出
+                    temperature: 0.1, // 極低溫度，降低 AI 自由發揮與省略的機率，使其變得極度死板且精確
+                    max_tokens: 8000
                 })
             });
 
@@ -421,7 +419,6 @@ ${safePaperText}
             const result = await response.json();
             let content = result.choices[0].message.content;
             
-            // Sanitize output
             content = content.replace(/```html/g, '').replace(/```/g, '').trim();
             return content;
         }
